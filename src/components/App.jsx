@@ -1,28 +1,16 @@
-import { ContactList } from './ContactList';
-import ContactForm  from './ContactForm';
-import { Filter } from './Filter';
+import { ContactList } from './ContactList/ContactList';
+import ContactForm  from './ContactForm/ContactForm';
+import { Filter } from './Filter/Filter';
 import css from "./Styles.module.css";
-import React, { useState, useEffect } from 'react';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact, changeFilter, deleteContact } from 'redux/contacts/contacts.reducer';
 
 
 export const App = () => {
 
-  const [contacts, setContacts] = useState(() => {
-    const parsedContacts =
-      JSON.parse(localStorage.getItem('contact')) ?? [];
-    return parsedContacts;
-  });
-
-  const [filter, setFilter] = useState('');
-  
-
-  
-  useEffect(() => {
-    const stringifiedContacts = JSON.stringify(contacts);
-    localStorage.setItem('contact', stringifiedContacts);
-  }, [contacts])
-    
+  const dispatch = useDispatch();
+  const contacts = useSelector(state => state.contactsStore.contacts);
+ const filter = useSelector(state => state.contactsStore.filter);
  
   const onFormSubmitHandler = contact => { 
     const hasDuplicates = contacts.some(item => item.name === contact.name);
@@ -31,12 +19,14 @@ export const App = () => {
       alert(`${contact.name} is already in the contacts list`);
       return;
     }
-    setContacts(prevContacts => [...prevContacts, contact]);
+    dispatch(addContact(contact));
   };
 
-  const onChangeFilter = event => {
-    setFilter(event.target.value);
+  
+    const onChangeFilter = event => {
+    dispatch(changeFilter(event.target.value));
   };
+  
 
  const filterList = () => {
     const normilizedFilter = filter.toLowerCase();
@@ -48,7 +38,7 @@ export const App = () => {
   };
 
   const onDelete = id => {
-    setContacts(contacts.filter(contact => contact.id !== id));
+    dispatch(deleteContact(id));
   };
  
 

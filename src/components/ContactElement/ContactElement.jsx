@@ -1,4 +1,4 @@
-import css from "./Styles.module.css"
+import css from "components/Styles.module.css"
 export const ContactElement = ({ id, name, number, onDelete }) => {
   return (
     <li className={css.item}>
