@@ -1,6 +1,13 @@
 import css from "components/Styles.module.css";
+import { useDispatch } from 'react-redux';
+import {  changeFilter } from 'redux/contacts/contacts.reducer';
 
-export const Filter = ({ value, onChange }) => {
+export const Filter = () => {
+  const dispatch = useDispatch();
+
+  const onChangeFilter = event => {
+    dispatch(changeFilter(event.target.value));
+  };
     return (
         <div>
       <label className={css.filter}>
@@ -9,8 +16,7 @@ export const Filter = ({ value, onChange }) => {
                     className={css.input}
           type="text"
           name="filter"
-          value={value}
-          onChange={onChange}
+          onChange={onChangeFilter}
         />
       </label>
     </div>
